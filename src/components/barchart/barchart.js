@@ -1,11 +1,9 @@
 import React, { useEffect, useRef } from "react"
 import * as d3 from "d3"
 
-import "./barchart.css"
+// import "./barchart.css"
 
 import styled from "styled-components"
-
-
 
 const BarChart = (props) => {
 
@@ -28,23 +26,21 @@ const BarChart = (props) => {
 
     const chartcanvas = props.canvas
     const VizWrapper = styled.div`
-    width: ${chartcanvas.width};
-    height: ${chartcanvas.height};
-    margin: auto;
-    text-align: center;
-    background-color: ${chartcanvas.background};
-    color: black;
-    border-style: solid;
-    border-width: 5px;
-    border-color: white;
-    border-radius: 10px;
-    box-shadow: inset 1px 1px 5px;
-    padding: 5% 5% 0% 5%;
-`
-const BarCanvas = styled.div`
-    margin-top: 0px;
-    background-color: ${chartcanvas.color};
-`
+        width: ${chartcanvas.width};
+        height: ${chartcanvas.height};
+        margin: auto;
+        text-align: center;
+        background-color: ${chartcanvas.background};
+        border-style: ${chartcanvas.border.style};
+        border-width: ${chartcanvas.border.width};
+        border-color: ${chartcanvas.border.color};
+        border-radius: ${chartcanvas.border.radius};
+        padding: 5% 5% 5% 5%;
+    `
+    const BarCanvas = styled.div`
+        background-color: white;
+        margin: auto;
+    `
 
     const drawBarChart = (vdata, hdata, margin, width, height, fillColor, htext, vtext, title, tooltip) => {
 
@@ -66,10 +62,11 @@ const BarCanvas = styled.div`
         // const xscale = d3.scaleLinear()
         //     .domain([d3.min(hdata), d3.max(hdata)])
         //     .range([0, width]);
+        const paddingBetween = props.spaceBetween
         const xscale = d3.scaleBand()
             .domain(hdata)
             .range([0, width])
-            .padding([.1])
+            .padding([paddingBetween])
             
 
         const xAxis = d3.axisBottom(xscale);
@@ -82,8 +79,8 @@ const BarCanvas = styled.div`
             .attr('transform', 'translate(' + margin.left + ',' + barbase + ')');
         
         svg.append('text')
-            .attr("x", width/2.5)
-            .attr("y", height + 1.25*margin.top)
+            .attr("x", width/2)
+            .attr("y", height + margin.top + htext.space)
             .attr("fill", htext.color)
             .text(htext.text)
             
@@ -109,19 +106,14 @@ const BarCanvas = styled.div`
 
         svg.append('text')
             .attr('transform', 'rotate(-90)')
-            .attr('x', -230)
-            .attr('y', 15)
+            .attr('x', -height/1.25)
+            .attr('y', vtext.space)
             .attr("fill", vtext.color)
             .text(vtext.text)
         
         svg.append("text")
-            .attr("x", 110)
-            .attr("y", 15)
-            .attr("class", "graph-title")
-            .attr("fill", "white")
-        svg.append("text")
             .attr("x", width/2)
-            .attr("y", margin.top/4)
+            .attr("y", margin.top/3)
             .attr("class", "graph-subtitle")
             .attr("fill", title.color)
             .text(title.text)
@@ -150,8 +142,8 @@ const BarCanvas = styled.div`
                 .style("color", tooltip.color)
                 .style("background", tooltip.background)
                 div.html(tooltip.x + ": " + hdata[i] + "<br>" + tooltip.y + ": " + vdata[i])
-                .style('left', (d3.event.pageX - 18) + 'px')
-                .style('top', (d3.event.pageY - 44) + 'px')
+                .style('left', (d3.event.pageX - tooltip.xshift) + 'px')
+                .style('top', (d3.event.pageY - tooltip.yshift) + 'px')
             })
             .on("mouseout", function (d) {
                 div.transition()
