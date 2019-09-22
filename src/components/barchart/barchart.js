@@ -32,8 +32,8 @@ const BarChart = (props) => {
     height: ${chartcanvas.height};
     margin: auto;
     text-align: center;
-    background-color: ${chartcanvas.color};
-    color: white;
+    background-color: ${chartcanvas.background};
+    color: black;
     border-style: solid;
     border-width: 5px;
     border-color: white;
