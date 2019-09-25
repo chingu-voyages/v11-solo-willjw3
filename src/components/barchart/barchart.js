@@ -1,8 +1,6 @@
 import React, { useEffect, useRef } from "react"
 import * as d3 from "d3"
 
-// import "./barchart.css"
-
 import styled from "styled-components"
 
 const BarChart = (props) => {
@@ -17,11 +15,12 @@ const BarChart = (props) => {
         const width = props.width
         const height = props.height
         const fillColor = props.barColor
+        const borderColor = props.barBorder
         const htext = props.horizontalText
         const vtext = props.verticalText
         const title = props.title
         const tooltip = props.tooltip
-        vdata.length && drawBarChart(vdata, hdata, margin, width, height, fillColor, htext, vtext, title, tooltip)
+        vdata.length && drawBarChart(vdata, hdata, margin, width, height, fillColor, borderColor, htext, vtext, title, tooltip)
     }, [props])
 
     const chartcanvas = props.canvas
@@ -42,7 +41,7 @@ const BarChart = (props) => {
         margin: auto;
     `
 
-    const drawBarChart = (vdata, hdata, margin, width, height, fillColor, htext, vtext, title, tooltip) => {
+    const drawBarChart = (vdata, hdata, margin, width, height, fillColor, borderColor, htext, vtext, title, tooltip) => {
 
         d3.select("svg").remove()
 
@@ -126,6 +125,7 @@ const BarChart = (props) => {
             .attr('height', function (d) {
                 return d;
             })
+            .attr("stroke", borderColor)
             .attr('fill', fillColor)
             .attr('x', function (d, i) {
                 return xscale(hdata[i]) + margin.left;
