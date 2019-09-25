@@ -1,4 +1,5 @@
-import BarChart from "./components/barchart/barchart"
+import BarChart from "./barchart"
+
 
 export {
     BarChart
