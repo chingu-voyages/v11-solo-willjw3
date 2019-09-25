@@ -2,9 +2,8 @@ import React, { useEffect, useRef } from "react"
 import * as d3 from "d3"
 
 import styled from "styled-components"
-import "./barchart.css"
 
-const BarChart = (props) => {
+const TimeChart = (props) => {
 
     const canvas = useRef(null)
 
@@ -59,17 +58,17 @@ const BarChart = (props) => {
             .attr('preserveAspectRatio', 'xMinYMin')
 
         
-        // const xscale = d3.scaleLinear()
-        //     .domain([d3.min(hdata), d3.max(hdata)])
-        //     .range([0, width]);
-        const paddingBetween = props.spaceBetween
-        const xscale = d3.scaleBand()
-            .domain(hdata)
-            .range([0, width])
-            .padding([paddingBetween])
+        const xscale = d3.scaleLinear()
+            .domain([d3.min(hdata), d3.max(hdata)])
+            .range([0, width]);
+        // const paddingBetween = props.spaceBetween
+        // const xscale = d3.scaleBand()
+        //     .domain(hdata)
+        //     .range([0, width])
+        //     .padding([paddingBetween])
             
 
-        const xAxis = d3.axisBottom(xscale);
+        const xAxis = d3.axisBottom(xscale).tickFormat(d3.format("d"));
 
         const bartop = margin.top/2 + 5
         const barbase = height + bartop
@@ -122,7 +121,7 @@ const BarChart = (props) => {
             .data(scaledVals)
             .enter()
             .append('rect')
-            .attr('width', xscale.bandwidth())
+            .attr('width', (width/vdata.length))
             .attr('height', function (d) {
                 return d;
             })
@@ -160,4 +159,4 @@ const BarChart = (props) => {
     )
 }
 
-export default BarChart
+export default TimeChart
