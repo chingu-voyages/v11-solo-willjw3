@@ -1,6 +1,6 @@
 {
   "name": "@willjw3/simple-bar-chart",
-  "version": "1.0.2",
+  "version": "1.0.5",
   "main": "dist/index.js",
   "scripts": {
     "transpile": "babel src -d dist --copy-files",

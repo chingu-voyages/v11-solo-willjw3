@@ -5,13 +5,12 @@ import styled from "styled-components"
 import "./barchart.css"
 
 const BarChart = (props) => {
-
     const canvas = useRef(null)
 
     useEffect(() => {
-        console.log(props)
         const vdata = props.vertical
         const hdata = props.horizontal
+        const minVal = props.setMin[0] === true ? props.setMin[1] : d3.min(vdata)
         const margin = props.margin
         const width = props.width
         const height = props.height
@@ -21,7 +20,7 @@ const BarChart = (props) => {
         const vtext = props.verticalText
         const title = props.title
         const tooltip = props.tooltip
-        vdata.length && drawBarChart(vdata, hdata, margin, width, height, fillColor, borderColor, htext, vtext, title, tooltip)
+        vdata.length && drawBarChart(vdata, hdata, minVal, margin, width, height, fillColor, borderColor, htext, vtext, title, tooltip)
     }, [props])
 
     const chartcanvas = props.canvas
@@ -42,9 +41,7 @@ const BarChart = (props) => {
         margin: auto;
     `
 
-    const drawBarChart = (vdata, hdata, margin, width, height, fillColor, borderColor, htext, vtext, title, tooltip) => {
-
-        d3.select("svg").remove()
+    const drawBarChart = (vdata, hdata, minVal, margin, width, height, fillColor, borderColor, htext, vtext, title, tooltip) => {
 
         var div = d3.select(canvas.current).append("div")
             .attr("id", "tooltip")
@@ -59,9 +56,6 @@ const BarChart = (props) => {
             .attr('preserveAspectRatio', 'xMinYMin')
 
         
-        // const xscale = d3.scaleLinear()
-        //     .domain([d3.min(hdata), d3.max(hdata)])
-        //     .range([0, width]);
         const paddingBetween = props.spaceBetween
         const xscale = d3.scaleBand()
             .domain(hdata)
@@ -85,7 +79,7 @@ const BarChart = (props) => {
             .text(htext.text)
             
         const linearScale = d3.scaleLinear()
-            .domain([0, d3.max(vdata)])
+            .domain([minVal, d3.max(vdata)])
             .range([0, height]);
 
         const scaledVals = vdata.map(function (item) {
@@ -93,7 +87,7 @@ const BarChart = (props) => {
         });
 
         const yscale = d3.scaleLinear()
-            .domain([0, d3.max(vdata)])
+            .domain([minVal, d3.max(vdata)])
             .range([height, 0]);
 
         const yAxis = d3.axisLeft(yscale)
