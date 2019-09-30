@@ -4,13 +4,12 @@ import * as d3 from "d3"
 import styled from "styled-components"
 import "./barchart.css"
 
-const BarChart = (props) => {
+const BarChartLinearNeg = (props) => {
     const canvas = useRef(null)
 
     useEffect(() => {
         const vdata = props.vertical
         const hdata = props.horizontal
-        const minVal = props.setMin[0] === true ? props.setMin[1] : d3.min(vdata)
         const margin = props.margin
         const width = props.width
         const height = props.height
@@ -20,7 +19,7 @@ const BarChart = (props) => {
         const vtext = props.verticalText
         const title = props.title
         const tooltip = props.tooltip
-        vdata.length && drawBarChart(vdata, hdata, minVal, margin, width, height, fillColor, borderColor, htext, vtext, title, tooltip)
+        vdata.length && drawBarChart(vdata, hdata, margin, width, height, fillColor, borderColor, htext, vtext, title, tooltip)
     }, [props])
 
     const chartcanvas = props.canvas
@@ -42,7 +41,7 @@ const BarChart = (props) => {
         margin: auto;
     `
 
-    const drawBarChart = (vdata, hdata, minVal, margin, width, height, fillColor, borderColor, htext, vtext, title, tooltip) => {
+    const drawBarChart = (vdata, hdata, margin, width, height, fillColor, borderColor, htext, vtext, title, tooltip) => {
 
         var div = d3.select(canvas.current).append("div")
             .attr("id", "tooltip")
@@ -57,14 +56,12 @@ const BarChart = (props) => {
             .attr('preserveAspectRatio', 'xMinYMin')
 
         
-        const paddingBetween = props.spaceBetween
-        const xscale = d3.scaleBand()
-            .domain(hdata)
-            .range([0, width])
-            .padding([paddingBetween])
+        const xscale = d3.scaleLinear()
+        .domain([d3.min(hdata), d3.max(hdata)])
+        .range([0, width]);
             
 
-        const xAxis = d3.axisBottom(xscale);
+        const xAxis = d3.axisBottom(xscale).tickFormat(d3.format("d"))
 
         const bartop = margin.top/2 + 5
         const barbase = height + bartop
@@ -80,16 +77,27 @@ const BarChart = (props) => {
             .text(htext.text)
             
         const linearScale = d3.scaleLinear()
-            .domain([minVal, d3.max(vdata)])
+            .domain([0, d3.max(vdata)])
             .range([0, height]);
 
         const scaledVals = vdata.map(function (item) {
             return linearScale(item);
         });
+        const negVals = vdata.filter(val => {
+            return val < 0
+        })
+        console.log("neg vals")
+        console.log(negVals)
+        const absvals = negVals.map(val => {
+            return Math.abs(val)
+        })
+        console.log(absvals)
+        console.log(d3.max(absvals)*-1)
 
+        
         const yscale = d3.scaleLinear()
-            .domain([minVal, d3.max(vdata)])
-            .range([height, 0]);
+            .domain([d3.max(absvals)*-1, d3.max(vdata)])
+            .range([height - (linearScale(d3.max(absvals)*-1)), 0]);
 
         const yAxis = d3.axisLeft(yscale)
 
@@ -117,9 +125,9 @@ const BarChart = (props) => {
             .data(scaledVals)
             .enter()
             .append('rect')
-            .attr('width', xscale.bandwidth())
+            .attr('width', width/hdata.length)
             .attr('height', function (d) {
-                return d
+                return Math.abs(d);
             })
             .attr("stroke", borderColor)
             .attr('fill', fillColor)
@@ -127,7 +135,11 @@ const BarChart = (props) => {
                 return xscale(hdata[i]) + margin.left;
             })
             .attr('y', function (d, i) {
-                return height - d + bartop
+                if (d < 0) {
+                    return height + bartop
+                } else {
+                    return height - d + bartop  
+                }
             })
             .on("mouseover", (d, i) => {
                 div.transition()
@@ -155,4 +167,4 @@ const BarChart = (props) => {
     )
 }
 
-export default BarChart
+export default BarChartLinearNeg

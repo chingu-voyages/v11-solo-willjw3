@@ -4,13 +4,12 @@ import * as d3 from "d3"
 import styled from "styled-components"
 import "./barchart.css"
 
-const BarChart = (props) => {
+const BarChartNeg = (props) => {
     const canvas = useRef(null)
 
     useEffect(() => {
         const vdata = props.vertical
         const hdata = props.horizontal
-        const minVal = props.setMin[0] === true ? props.setMin[1] : d3.min(vdata)
         const margin = props.margin
         const width = props.width
         const height = props.height
@@ -20,7 +19,7 @@ const BarChart = (props) => {
         const vtext = props.verticalText
         const title = props.title
         const tooltip = props.tooltip
-        vdata.length && drawBarChart(vdata, hdata, minVal, margin, width, height, fillColor, borderColor, htext, vtext, title, tooltip)
+        vdata.length && drawBarChart(vdata, hdata, margin, width, height, fillColor, borderColor, htext, vtext, title, tooltip)
     }, [props])
 
     const chartcanvas = props.canvas
@@ -42,7 +41,7 @@ const BarChart = (props) => {
         margin: auto;
     `
 
-    const drawBarChart = (vdata, hdata, minVal, margin, width, height, fillColor, borderColor, htext, vtext, title, tooltip) => {
+    const drawBarChart = (vdata, hdata, margin, width, height, fillColor, borderColor, htext, vtext, title, tooltip) => {
 
         var div = d3.select(canvas.current).append("div")
             .attr("id", "tooltip")
@@ -80,7 +79,7 @@ const BarChart = (props) => {
             .text(htext.text)
             
         const linearScale = d3.scaleLinear()
-            .domain([minVal, d3.max(vdata)])
+            .domain([0, d3.max(vdata)])
             .range([0, height]);
 
         const scaledVals = vdata.map(function (item) {
@@ -88,8 +87,8 @@ const BarChart = (props) => {
         });
 
         const yscale = d3.scaleLinear()
-            .domain([minVal, d3.max(vdata)])
-            .range([height, 0]);
+            .domain([d3.min(vdata), d3.max(vdata)])
+            .range([height - (linearScale(d3.min(vdata))), 0]);
 
         const yAxis = d3.axisLeft(yscale)
 
@@ -119,7 +118,7 @@ const BarChart = (props) => {
             .append('rect')
             .attr('width', xscale.bandwidth())
             .attr('height', function (d) {
-                return d
+                return Math.abs(d);
             })
             .attr("stroke", borderColor)
             .attr('fill', fillColor)
@@ -127,7 +126,11 @@ const BarChart = (props) => {
                 return xscale(hdata[i]) + margin.left;
             })
             .attr('y', function (d, i) {
-                return height - d + bartop
+                if (d < 0) {
+                    return height + bartop
+                } else {
+                    return height - d + bartop  
+                }
             })
             .on("mouseover", (d, i) => {
                 div.transition()
@@ -155,4 +158,4 @@ const BarChart = (props) => {
     )
 }
 
-export default BarChart
+export default BarChartNeg
