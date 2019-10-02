@@ -3,7 +3,7 @@ Chingu Voyage 11
 ## Simple Bar Chart
 *A React component library that lets you easily insert bar charts into your web app just by passing in a handful of parameters*
 
-<img src="./images/simplebarchart.png" style="width:600px; margin-left:70px" /> 
+<img src="./src/simplebarchart.png" style="width:600px; margin-left:70px" /> 
 
 **Installation**
 ```
@@ -47,7 +47,9 @@ import { BarChartLinear } from "@willjw3/simple-bar-chart"
 />
 ```
 
-Passed props in the above example:
+3. Wrap chart components in a `div` for controlling size, placement, etc... Widths and heights aren't automatically adjusted based on screen size, so you'll have to use this `div` for resizing.
+
+**Passed props in the above example:**
 - `horizontal` - array of values defining the horizontal displacement from the y-axis of each bar.
 - `vertical` - array of values defining the height of each bar with its base on the x-axis. In this example, `years` and `temps` would be arrays created from data brought into the app from an external api. It's up to you to get the data into these arrays.
 - `margin` - space between the edge of the canvas (chart background) and the content of the chart, including labels.
