@@ -23,19 +23,6 @@ const BarChartLinear = (props) => {
         vdata.length && drawBarChart(vdata, hdata, minVal, margin, width, height, fillColor, borderColor, htext, vtext, title, tooltip)
     }, [props])
 
-    const chartcanvas = props.canvas
-    const VizWrapper = styled.div`
-        width: ${chartcanvas.width};
-        height: ${chartcanvas.height};
-        margin: auto;
-        text-align: center;
-        background-color: ${chartcanvas.background};
-        border-style: ${chartcanvas.border.style};
-        border-width: ${chartcanvas.border.width};
-        border-color: ${chartcanvas.border.color};
-        border-radius: ${chartcanvas.border.radius};
-        padding: 5% 5% 5% 5%;
-    `
     const chartColor = props.chartBackground
     const BarCanvas = styled.div`
         background-color: ${chartColor};
@@ -147,9 +134,9 @@ const BarChartLinear = (props) => {
     }
 
     return (
-        <VizWrapper>
+        <>
             <BarCanvas ref={canvas}></BarCanvas>
-        </VizWrapper>
+        </>
     )
 }
 
