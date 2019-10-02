@@ -48,11 +48,24 @@ import { BarChartLinear } from "@willjw3/simple-bar-chart"
 />
 ```
 
-In the above example, 
-- `years` and `temps` would be arrays created from data brought into the app from an external api. 
-- The `horizontal` and `vertical` props take in arrays with an equal number of elements. It's up to you to get the data into these arrays. 
-- `horizontalText` is for the x-axis label and `verticalText` is for the y-axis label.
-- `setMin` is for setting whether the minimum value on the y-axis corresponds to the value of the minimum data point or a value which the user chooses. To use the value corresponding to the minimum data point value, use `setMin={[false, 0]}`. To use a custom value, use `setMin={[true: <your custom value>]}` 
-- `width` and `height` are for the chart background, while `canvas` is the `div` that wraps the chart. 
-- In this example, `title.text` takes values from a `json` object that contains the data used. 
-- `tooltip` handles the element displayed when hovering over a bar. 
+Passed props in the above example:
+- `horizontal` - array of values defining the horizontal displacement from the y-axis of each bar.
+- `vertical` - array of values defining the height of each bar with its base on the x-axis. In this example, `years` and `temps` would be arrays created from data brought into the app from an external api. It's up to you to get the data into these arrays.
+- `margin` - space between the edge of the canvas (chart background) and the content of the chart, including labels.
+- `width` and `height` are for the chart canvas.
+- `barColor` - color of bars in the chart.
+- `barBorder` - outline color of bars. Set to 'transparent' for no outline.
+- `spaceBetween` - sets the amount of space between bars for `barChart` and `barChartNeg` charts. Ranges from 0 to 1 with 0 being no space and 1 being the maximum space. 
+- `horizontalText` is for the x-axis label and 
+- `verticalText` is for the y-axis label. The `space` property affects the movement of the text in a direction perpendicular to its associated axis. `fromLeft` moves the text horizontally (parallel to the x-axis) and `fromTop` moves the text vertically (parallel to the y-axis)
+- `setMin` -  for setting whether the minimum value on the y-axis corresponds to the value of the minimum data point or a value which the user chooses. To use the value corresponding to the minimum data point value, use `setMin={[false, 0]}`. To use a custom value, use `setMin={[true: <your custom value>]}` 
+- `title` - the title of your chart. In this example, `title.text` takes values from a `json` object that contains the data used.
+- `canvas` - not the `svg` canvas, but the `div` that wraps the chart component.
+- `chartBackground` is only the color of the chart's background. For the best-looking results, set this equal to the `background` property of the `canvas` prop. 
+- `tooltip` - displays data corresponding to a given bar when hovering over it. `x` is the horizontal axis label, `y` is the vertical axis label, `xshift` and `yshift` control the distance of the tooltip display from its corresponding bar in the horizontal and vertical directions, respectively.
+
+**Contribute**
+- to address any problems with the library, or to suggest any improvements, follow [this link](https://github.com/chingu-voyages/v11-solo-willjw3/issues) and post an issue.
+- to fix any code issues or fix/improve the documentation here, submit your changes in the form of a pull request by following [this link](https://github.com/chingu-voyages/v11-solo-willjw3/pulls).
+
+**Author:** @willjw3
